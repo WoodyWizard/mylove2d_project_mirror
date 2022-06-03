@@ -4,7 +4,7 @@ local HooECS = require('HooECS')
 local preface = require('preface')
 local bump = require 'bump.bump'
 
-local core = {list_collision = {}, list_draw = {}, collision_id_list = {
+local core = {collision_id_list = {
     262,263
     },
     entities = {},
@@ -87,36 +87,6 @@ function core:load_systems(dt)
     self.engine:addSystem(preface.systems.CameraMovement())
     self.engine:addSystem(preface.systems.CollisiomSystem())
 end
-
-
-function core:add_collision(collision_box)
-    table.insert(self.list_collision, collision_box)
-end
-
-function core:add_drawable(drawable)
-    if drawable.scale == nil then
-        drawable.scale = 1
-    end
-    if drawable.rotate == nil then
-        drawable.rotate = 0
-    end
-        table.insert(self.list_draw, drawable)
-end
-
-
-function core:draw()
-    if self.list_draw ~= nil then
-        for i = 1, #self.list_draw, 1 do
-            if self.list_draw[i].animation == nil then
-                love.graphics.draw(self.list_draw[i].image,
-                self.list_draw[i].position.x, self.list_draw[i].position.y , self.list_draw[i].rotate , self.list_draw[i].scale)
-            else
-                self.list_draw[i].animation:draw(self.list_draw[i].spritesheet, self.list_draw[i].position.x, self.list_draw[i].position.y, self.list_draw[i].rotate , self.list_draw[i].scale)
-            end
-        end
-    end
-end
-
 
 
 return core

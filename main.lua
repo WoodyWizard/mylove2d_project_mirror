@@ -8,13 +8,7 @@ local my_time = 0
 
 
 function love.draw()
-
-
-        
-            
-
         core.engine:draw()
-
 end
 
 
@@ -22,28 +16,25 @@ function love.load()
     mmx = 0
     mmy = 0
     font = love.graphics.newFont("AlexandriaFLF.ttf", 64)
-    love.window.setVSync(true)
+    love.window.setMode(1920,1080, {msaa = 16})
+    --love.window.setVSync(true)
     love.keyboard.setKeyRepeat(true)
     love.window.setFullscreen( true )
-    --love.graphics.setDefaultFilter( "nearest" )
+    --love.graphics.setDefaultFilter("nearest", "nearest")
     sti = require('sti')
     camera = require('camera')
     cam = camera()
-    cam:zoom(1)
+    cam:zoom(0.64)
     box_image = love.graphics.newImage("box.png")
     
-
     core:init()
     core:load_systems()
     core:init_collision()
     
-
-
     core:create_entity({
         core:add_component("tilemap")(sti('mymap.lua'))
     })
     core:init_tilemap()
-
 
     local player_animation = {}
     local player_spritesheet = love.graphics.newImage("playerspritesheet.png")
@@ -64,15 +55,11 @@ function love.load()
                             core:add_component("collision")()
                         })
 
-
     core:create_entity({
         core:add_component("base")(200,100),
         core:add_component("collision")()
     })
 
-
-    
-    
     core:create_base_entity()
 end
 
