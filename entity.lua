@@ -1,4 +1,5 @@
 require("utils")
+local HooECS = require('HooECS')
 
 local entity = {position = {x = 0, y = 0}, type = nil, collision_box = {width = 0, height = 0}, velocity = 0, image = nil, angle = nil, ignore_type = {}, id = {d = nil, c = nil, b = nil}}
 

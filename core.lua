@@ -1,29 +1,96 @@
 local entityCreator = require('entity')
 local arrowImage = love.graphics.newImage("arrow.png")
 local HooECS = require('HooECS')
+local preface = require('preface')
+local bump = require 'bump.bump'
 
 local core = {list_collision = {}, list_draw = {}, collision_id_list = {
     262,263
     },
-    bullets = {},
-    gid = {d = 1, c = 1, b = 1},
+    entities = {},
     engine = nil,
     eventmanager = nil,
-
+    systems = {}
 }
 
 
 function core:init()
-    HooECS.initialize()
+    HooECS.initialize({globals = true, debug = true})
     self.engine = HooECS.Engine()
     self.eventmanager = HooECS.EventManager()
 end
 
 
+function core:create_entity(components)
+    local entity = HooECS.Entity()
+    for _, comp in pairs(components) do
+        entity:add(comp)
+    end
+    
+    if entity:has("collision") then
+        local worldOfCollision = self.engine:getEntitiesWithComponent("collisionworld")
+        local worldworld = worldOfCollision[1]:get("collisionworld")
+        local basebase = entity:get("base")
+        worldworld.world:add(entity, basebase.x, basebase.y, basebase.width, basebase.height)
+        entity:setParent(worldOfCollision[1])
+    end
+
+    self.engine:addEntity(entity)
+end
+
+function core:create_base_entity()
+    local entity = preface:entity_component("base", {x = 100, y = 100})
+    self.engine:addEntity(entity)
+end
+
+
+function core:add_component(name)
+    return preface:add_component(name)
+end
+
+
+function core:init_collision()
+    local world = bump.newWorld(64)
+    self:create_entity({
+        core:add_component("collisionworld")(world),
+    })
+end
+
+
+function core:init_tilemap()
+    local tiletile = self.engine:getEntitiesWithComponent("tilemap")
+    local newsomething = tiletile[2]:get("tilemap")
+
+    for i = 1, newsomething.sti.layers["wallsandcollide"].height, 1 do
+        for b = 1, newsomething.sti.layers["wallsandcollide"].width, 1 do
+            if newsomething.sti.layers["wallsandcollide"].data[b][i] ~= nil then
+                for collision_id_counter = 1, #core.collision_id_list, 1 do
+                    if newsomething.sti.layers["wallsandcollide"].data[b][i].gid == core.collision_id_list[collision_id_counter] then
+                        core:create_entity({
+                            core:add_component("base")((i*64)-64,(b*64)-64),
+                            core:add_component("collision")()
+                        })
+                    end
+                end
+            end
+        end
+    end
+end
+
+
+function core:load_systems(dt)
+    self.engine:addSystem(preface.systems.MoveSystem())
+    self.engine:addSystem(preface.systems.PlayerMovement())
+    self.engine:addSystem(preface.systems.DrawSystem(), "draw")
+    --self.engine:addSystem(preface.systems.AnimationSystem(), "draw")
+    self.engine:addSystem(preface.systems.UpdateAnimation())
+    self.engine:addSystem(preface.systems.CameraMovement())
+    self.engine:addSystem(preface.systems.CollisiomSystem())
+end
+
+
 function core:add_collision(collision_box)
-    collision_box:set_id(nil,self.gid.c,nil)
     table.insert(self.list_collision, collision_box)
-    self.gid.c = self.gid.c + 1
 end
 
 function core:add_drawable(drawable)
@@ -33,20 +100,7 @@ function core:add_drawable(drawable)
     if drawable.rotate == nil then
         drawable.rotate = 0
     end
-        drawable:set_id(self.gid.d,nil,nil)
         table.insert(self.list_draw, drawable)
-        self.gid.d = self.gid.d + 1
-end
-
-
-function core:remove(object)
-    table.remove(self.list_collision, object.id_c)
-    table.remove(self.list_draw, object.id_d)
-    table.remove(self.bullets, object.id_b)
-    object = nil
-    self.gid.d = self.gid.d - 1
-    self.gid.c = self.gid.c - 1
-    self.gid.b = self.gid.b - 1
 end
 
 
@@ -61,77 +115,7 @@ function core:draw()
             end
         end
     end
-    if self.bullets ~= nil then
-        for i = 1, #self.bullets, 1 do
-            if self.bullets[i] ~= nil then
-                love.graphics.draw(self.bullets[i].image,
-                self.bullets[i].position.x, self.bullets[i].position.y , self.bullets[i].rotate , self.bullets[i].scale)
-            end
-        end
-    end
 end
-
-
-function core:find_delete(object)
-    local dataObject = {id_c = nil, id_d = nil, id_b = nil}
-    for key, value in pairs(self.list_collision) do
-        if value == object then
-            dataObject.id_c = key
-        end
-    end
-    for key, value in pairs(self.list_draw) do
-        if value == object then
-            dataObject.id_d = key
-        end
-    end
-    for key, value in pairs(self.bullets) do
-        if value == object then
-            dataObject.id_b = key
-        end
-    end
-    return dataObject
-end
-
-
-function core:create_bullet(x,y,angl)
-    local bullet = entityCreator:new()
-    bullet:set_position(x,y)
-    bullet:load_image(arrowImage)
-    bullet:set_velocity(4000)
-    bullet:set_collision(6,6)
-    bullet:set_scale(0.1)
-    bullet:set_angle(angl)
-    bullet:set_type("bullet")
-    bullet:set_ignore("bullet")
-    bullet:set_ignore("box")
-    bullet:set_id(nil,nil,self.gid.b)
-    table.insert(self.bullets, bullet)
-    core:add_drawable(bullet)
-    core:add_collision(bullet)
-    self.gid.b = self.gid.b + 1
-end
-
-
-function core:detect_bullet_collision()
-    for key, value in pairs(self.bullets) do
-        if value ~= nil then
-            for _, blockOfCollision in pairs(self.list_collision) do
-                if value ~= blockOfCollision then
-                    if value ~= nil then
-                        if value:detect_collision(blockOfCollision) == true then
-                            if value:check_ignore(blockOfCollision) == false then
-                                core:remove(core:find_delete(value))
-                                value = nil
-                            end
-                        end
-                    end
-                end
-            end
-        end
-    end
-end
-
-
 
 
 
