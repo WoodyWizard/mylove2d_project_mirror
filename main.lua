@@ -1,11 +1,8 @@
-local playerCore = require("playerEntity")
-local entityCreator = require('entity')
-local core = require('core')
+core = require('core')
 local anim8 = require('anim8')
 local bump = require 'bump.bump'
 
 local my_time = 0
-
 
 function love.draw()
         core.engine:draw()
@@ -16,16 +13,23 @@ function love.load()
     mmx = 0
     mmy = 0
     font = love.graphics.newFont("AlexandriaFLF.ttf", 64)
-    love.window.setMode(1920,1080, {msaa = 16})
+    love.window.setMode(1920,1080)
     --love.window.setVSync(true)
     love.keyboard.setKeyRepeat(true)
-    love.window.setFullscreen( true )
+    --love.window.setFullscreen( true )
+    
+    --love.graphics.setDefaultFilter( "linear", "linear", 16 )
     --love.graphics.setDefaultFilter("nearest", "nearest")
+    --love.graphics.setDefaultFilter("nearest")
+    
     sti = require('sti')
     camera = require('camera')
     cam = camera()
-    cam:zoom(0.64)
+    cam:zoom(1)
     box_image = love.graphics.newImage("box.png")
+    hand_image = love.graphics.newImage("hand.png")
+
+
     
     core:init()
     core:load_systems()
@@ -52,13 +56,10 @@ function love.load()
                             core:add_component("player")(1),
                             core:add_component("animation")(player_spritesheet, player_grid , player_animation) ,
                             core:add_component("camera")(cam),
-                            core:add_component("collision")()
+                            core:add_component("collision")(),
+			    core:add_component("hand")(0,0,hand_image)
                         })
 
-    core:create_entity({
-        core:add_component("base")(200,100),
-        core:add_component("collision")()
-    })
 
     core:create_base_entity()
 end
@@ -67,7 +68,6 @@ end
 function love.mousemoved()
     mmx, mmy = cam:mousePosition()
 end
-
 
 function love.update(dt)
     my_time = my_time + dt
@@ -99,7 +99,6 @@ end
 
 
 function love.mousepressed()
-
 end
 
 
@@ -107,5 +106,4 @@ function timerupdate()
 
 end
 
-
-
+	

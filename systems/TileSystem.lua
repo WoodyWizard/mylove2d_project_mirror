@@ -5,15 +5,13 @@ local TileSystem = class("TileSystem", System)
 
 
 function TileSystem:requires()
-    return {"tilemap"}
+    return { tiles = {"tilemap"}, c = {"camera"} }
 end
 
 
 
-function TileSystem:update(dt)
-    for _, entity in pairs(self.targets) do
+function TileSystem:draw(dt)
 
-    end
 end
 
 return TileSystem

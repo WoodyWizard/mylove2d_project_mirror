@@ -1,4 +1,3 @@
-local entityCreator = require('entity')
 local arrowImage = love.graphics.newImage("arrow.png")
 local HooECS = require('HooECS')
 local preface = require('preface')
@@ -34,7 +33,7 @@ function core:create_entity(components)
         worldworld.world:add(entity, basebase.x, basebase.y, basebase.width, basebase.height)
         entity:setParent(worldOfCollision[1])
     end
-
+	
     self.engine:addEntity(entity)
 end
 
@@ -81,11 +80,15 @@ end
 function core:load_systems(dt)
     self.engine:addSystem(preface.systems.MoveSystem())
     self.engine:addSystem(preface.systems.PlayerMovement())
+    self.engine:addSystem(preface.systems.CameraMovement())
+    --self.engine:addSystem(preface.systems.TileMapSystem(), "draw")
     self.engine:addSystem(preface.systems.DrawSystem(), "draw")
     --self.engine:addSystem(preface.systems.AnimationSystem(), "draw")
     self.engine:addSystem(preface.systems.UpdateAnimation())
-    self.engine:addSystem(preface.systems.CameraMovement())
     self.engine:addSystem(preface.systems.CollisiomSystem())
+    self.engine:addSystem(preface.systems.BulletSystem())
+    self.engine:addSystem(preface.systems.HandMovement())
+    self.engine:addSystem(preface.systems.MouseMovement())
 end
 
 

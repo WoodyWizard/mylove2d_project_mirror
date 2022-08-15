@@ -44,6 +44,8 @@ end
 
 function camera:lookAt(x,y)
 	self.x, self.y = x, y
+	--self.x = math.floor(self.x)
+	--self.y = math.floor(self.y)
 	return self
 end
 
@@ -86,6 +88,8 @@ function camera:attach(x,y,w,h, noclip)
 	end
 
 	local cx,cy = x+w/2, y+h/2
+	--cx = math.floor(cx)
+	--cy = math.floor(cy)
 	love.graphics.push()
 	love.graphics.translate(cx, cy)
 	love.graphics.scale(self.scale)
@@ -110,7 +114,6 @@ function camera:draw(...)
 	else
 		error("Invalid arguments to camera:draw()")
 	end
-
 	self:attach(x,y,w,h,noclip)
 	func()
 	self:detach()

@@ -9,6 +9,8 @@ local camera = require('components.camera')
 local collisionworld = require('components.collisionworld')
 local collision = require('components.collision')
 local tilemap = require('components.tilemap')
+local hand = require('components.hand')
+local mouse = require('components.mouse')
 
 local components = { 
     base = base, 
@@ -20,7 +22,9 @@ local components = {
     camera = camera,
     collisionworld = collisionworld,
     collision = collision,
-    tilemap = tilemap
+    tilemap = tilemap,
+    hand = hand,
+    mouse = mouse
 }
 
 

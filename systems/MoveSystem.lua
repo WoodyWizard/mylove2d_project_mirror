@@ -12,11 +12,11 @@ end
 
 function MoveSystem:update(dt)
     for _, entity in pairs(self.targets) do
-        --local position = entity:get("base")
-        --local velocity = entity:get("velocity")
-        --position.x = position.x + velocity.dx * dt
-        --position.y = position.y + velocity.dy * dt
-        print("MoveSystem")
+        local position = entity:get("base")
+        local velocity = entity:get("velocity")
+	local bullet = entity:get("bullets")
+        position.x = position.x + math.sin(bullet.angle) * velocity.dx * dt
+        position.y = position.y + math.cos(bullet.angle) * velocity.dy * dt
     end
 end
 

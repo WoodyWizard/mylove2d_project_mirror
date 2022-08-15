@@ -471,6 +471,12 @@ function Map:addNewLayerTile(layer, chunk, tile, x, y)
 
 	local batch = batches[tileset]
 	local tileX, tileY = self:getLayerTilePosition(layer, tile, x, y)
+
+	--tileX = math.floor(tileX)
+	--tileY = math.floor(tileY)
+	--print(tileX)
+	--print(tileY)
+
 	local instance = {
 		layer = layer,
 		chunk = chunk,
