@@ -26,13 +26,13 @@ function core:create_entity(components)
         entity:add(comp)
     end
     
-    if entity:has("collision") then
-        local worldOfCollision = self.engine:getEntitiesWithComponent("collisionworld")
-        local worldworld = worldOfCollision[1]:get("collisionworld")
-        local basebase = entity:get("base")
-        worldworld.world:add(entity, basebase.x, basebase.y, basebase.width, basebase.height)
-        entity:setParent(worldOfCollision[1])
-    end
+    --if entity:has("collision") then
+    --    local worldOfCollision = self.engine:getEntitiesWithComponent("collisionworld")
+    --    local worldworld = worldOfCollision[1]:get("collisionworld")
+    --    local basebase = entity:get("base")
+    --    worldworld.world:add(entity, basebase.x, basebase.y, basebase.width, basebase.height)
+    --    entity:setParent(worldOfCollision[1])
+    --end
 	
     self.engine:addEntity(entity)
 end
@@ -67,7 +67,7 @@ function core:init_tilemap()
                     if newsomething.sti.layers["wallsandcollide"].data[b][i].gid == core.collision_id_list[collision_id_counter] then
                         core:create_entity({
                             core:add_component("base")((i*64)-64,(b*64)-64),
-                            core:add_component("collision")()
+                            core:add_component("collision")(nil, 'wall')
                         })
                     end
                 end
@@ -78,6 +78,7 @@ end
 
 
 function core:load_systems(dt)
+    self.engine:addSystem(preface.systems.CollisionInitializer())
     self.engine:addSystem(preface.systems.MoveSystem())
     self.engine:addSystem(preface.systems.PlayerMovement())
     self.engine:addSystem(preface.systems.CameraMovement())

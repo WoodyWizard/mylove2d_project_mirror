@@ -1,22 +1,45 @@
 local HooECS = require('HooECS')
 
+local bulletFilter = function(item,other)
+	local object = other:get('collision')
+	if object.collision_type == 'wall' then return 'touch'
+	elseif object.collision_type == 'player' then return nil
+	elseif object.collision_type == 'bullet' then return nil
+	else return nil
+	end
+end
+
 
 local MoveSystem = class("MoveSystem", System)
 
 
 function MoveSystem:requires()
-    return {"base", "velocity", "bullets"}
+    return {"base", "velocity", "bullets", "collision"}
 end
 
 
 
 function MoveSystem:update(dt)
     for _, entity in pairs(self.targets) do
-        local position = entity:get("base")
+	local collisionworld = entity:getParent()
+	local world = collisionworld:get("collisionworld")
+	local position = entity:get("base")
         local velocity = entity:get("velocity")
 	local bullet = entity:get("bullets")
-        position.x = position.x + math.sin(bullet.angle) * velocity.dx * dt
-        position.y = position.y + math.cos(bullet.angle) * velocity.dy * dt
+
+	local pos1x = position.x + math.sin(bullet.angle) * velocity.dx * dt
+	local pos1y = position.y + math.cos(bullet.angle) * velocity.dy * dt
+	local actualX, actualY, cols, len = world.world:move(entity, pos1x, pos1y, bulletFilter)
+        position.x = actualX 
+        position.y = actualY
+	for i=1, len do
+		local other = cols[i].other:get('collision')
+		if other.collision_type == 'wall' then
+			local eng = cols[i].item:getEngine()
+			world.world:remove(cols[i].item)
+			eng:removeEntity(cols[i].item)
+		end
+	end
     end
 end
 

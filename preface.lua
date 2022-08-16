@@ -12,12 +12,13 @@ local TileMapSystem = require('systems.TileSystem')
 local BulletSystem = require('systems.BulletSystem')
 local HandMovement = require('systems.HandMovement')
 local MouseMovement = require('systems.MouseMovement')
+local CollisionInitializer = require('systems.Initializer')
 
 
 
 
 local preface = {systems = {MoveSystem = MoveSystem, PlayerMovement = PlayerMovement, DrawSystem = DrawSystem, AnimationSystem = AnimationSystem,
-                UpdateAnimation = UpdateAnimation, CameraMovement = CameraMovement, CollisiomSystem = CollisiomSystem, TileMapSystem = TileMapSystem, BulletSystem = BulletSystem, HandMovement = HandMovement, MouseMovement = MouseMovement}}
+                UpdateAnimation = UpdateAnimation, CameraMovement = CameraMovement, CollisiomSystem = CollisiomSystem, TileMapSystem = TileMapSystem, BulletSystem = BulletSystem, HandMovement = HandMovement, MouseMovement = MouseMovement, CollisionInitializer = CollisionInitializer}}
 
 
 function preface:entity_component(name, values)

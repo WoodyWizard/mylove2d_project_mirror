@@ -27,17 +27,17 @@ function handmovement:update(dt)
 		if love.mouse.isDown(1) == true then
 			local eng = entity:getEngine()
 			local entity_bullet = HooECS.Entity()
-			local base = Component.create("base", {"x", "y"}, {x= hand.x, y=hand.y})
+			local base = Component.create("base", {"x", "y", "width", "height"}, {x= hand.x, y=hand.y, width = 8, height=8})
 			local bullets = Component.create("bullets", {"angle"}, {angle = hand.angle})
 			local velocity = Component.create("velocity", {"dx", "dy"}, {dx = 0, dy = 0})
-			local collisio = Component.create("collision", {"something"}, {something = nil})
-			local draw = Component.create("draw", {"scale", "rotate", "sprite"}, {scale = 1, rotate = 0, sprite = nil})
+			local collisio = Component.create("collision", {"something", "collision_type"}, {something = nil, collision_type = 'bullet'})
+			local draw = Component.create("draw", {"scale", "rotate", "sprite"}, {scale = 0.2, rotate = 0, sprite = nil})
 
 			entity_bullet:add(base())
 			entity_bullet:add(bullets())
-			entity_bullet:add(velocity(500,500))
+			entity_bullet:add(velocity(1000,1000))
 			entity_bullet:add(collisio())
-			entity_bullet:add(draw(1,0,box_image))
+			entity_bullet:add(draw(0.2,0,box_image))
 			eng:addEntity(entity_bullet)
 		end
         end

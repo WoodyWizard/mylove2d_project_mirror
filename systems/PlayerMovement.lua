@@ -1,5 +1,13 @@
 local HooECS = require('HooECS')
 
+local playerFilter = function(item,other)
+	local object = other:get('collision')
+	if object.collision_type == 'wall' then return 'slide'
+	elseif object.collision_type == 'bullet' then return nil
+	else return nil
+	end
+end
+
 
 local playermovement = class("playermovement", System)
 
@@ -17,8 +25,8 @@ function playermovement:update(dt)
                 local animation = entity:get("animation")
                 local collisionworld = entity:getParent()
                 local world = collisionworld:get("collisionworld")
-
-                animation.animation.current = animation.animation.default
+                
+		animation.animation.current = animation.animation.default
                 local dx , dy = 0, 0
                 if love.keyboard.isDown("w") then
                         dy = dy + -(velocity.dy)
@@ -41,7 +49,7 @@ function playermovement:update(dt)
                 local newpositionx, newpositiony = position.x + (dx * 0.016) , position.y + (dy * 0.016)
 
                 --print(collisionworld:get("collisionworld"))
-                local actualx, actualy, cols, len = world.world:move(entity, newpositionx , newpositiony)
+                local actualx, actualy, cols, len = world.world:move(entity, newpositionx , newpositiony, playerFilter)
                 --print(actualx, " ", actualy)
                 position.x = actualx
                 position.y = actualy

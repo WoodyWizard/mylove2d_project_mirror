@@ -56,7 +56,7 @@ function love.load()
                             core:add_component("player")(1),
                             core:add_component("animation")(player_spritesheet, player_grid , player_animation) ,
                             core:add_component("camera")(cam),
-                            core:add_component("collision")(),
+                            core:add_component("collision")(nil, 'player'),
 			    core:add_component("hand")(0,0,hand_image)
                         })
 

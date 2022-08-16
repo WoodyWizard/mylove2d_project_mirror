@@ -23,7 +23,7 @@ function DrawSystem:draw()
             for _, entity in pairs(self.targets.first) do
 		local drawObjectPosition = entity:get("base")
 		local spriteObject = entity:get("draw")
-		love.graphics.draw(spriteObject.sprite, drawObjectPosition.x, drawObjectPosition.y)
+		love.graphics.draw(spriteObject.sprite, drawObjectPosition.x, drawObjectPosition.y, spriteObject.rotate ,spriteObject.scale)
             end
             for _, animationEntity in pairs(self.targets.animated) do
                 local position = animationEntity:get("base")
