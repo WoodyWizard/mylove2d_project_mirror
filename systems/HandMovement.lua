@@ -14,6 +14,7 @@ function handmovement:update(dt)
 		local position = entity:get("base")
 		local camera = entity:get("camera")
 		local hand = entity:get("hand")
+		local team = entity:get("team")
 
 		local distx = camera.mouse_x - position.x
 		local disty = camera.mouse_y - position.y
@@ -25,19 +26,24 @@ function handmovement:update(dt)
 		hand.y = position.y+8 + (math.cos(angle) * distance)
 
 		if love.mouse.isDown(1) == true then
+			--print(team.team)
 			local eng = entity:getEngine()
-			local entity_bullet = HooECS.Entity()
+			local entity_bullet = HooECS.Entity(entity)
 			local base = Component.create("base", {"x", "y", "width", "height"}, {x= hand.x, y=hand.y, width = 8, height=8})
 			local bullets = Component.create("bullets", {"angle"}, {angle = hand.angle})
 			local velocity = Component.create("velocity", {"dx", "dy"}, {dx = 0, dy = 0})
 			local collisio = Component.create("collision", {"something", "collision_type"}, {something = nil, collision_type = 'bullet'})
 			local draw = Component.create("draw", {"scale", "rotate", "sprite"}, {scale = 0.2, rotate = 0, sprite = nil})
-
+			local bulletfilter = Component.create("bulletfilter",{"objects"}, {objects = nil})
+			local teamteam = Component.create("team", {"team"}, {team = team.team})
 			entity_bullet:add(base())
 			entity_bullet:add(bullets())
 			entity_bullet:add(velocity(1000,1000))
 			entity_bullet:add(collisio())
-			entity_bullet:add(draw(0.2,0,box_image))
+			entity_bullet:add(draw(0.1,0,bullet_image))
+			entity_bullet:add(bulletfilter())
+			entity_bullet:add(teamteam())
+			--entity_bullet:setParent(entity)
 			eng:addEntity(entity_bullet)
 		end
         end

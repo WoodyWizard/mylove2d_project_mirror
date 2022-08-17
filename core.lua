@@ -90,6 +90,8 @@ function core:load_systems(dt)
     self.engine:addSystem(preface.systems.BulletSystem())
     self.engine:addSystem(preface.systems.HandMovement())
     self.engine:addSystem(preface.systems.MouseMovement())
+    self.engine:addSystem(preface.systems.TurretControl())
+    self.engine:addSystem(preface.systems.HpSystem())
 end
 
 

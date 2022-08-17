@@ -2,9 +2,14 @@ local HooECS = require('HooECS')
 
 local bulletFilter = function(item,other)
 	local object = other:get('collision')
+	local team = other:get('team')
+	local team_item = item:get('team')
+
 	if object.collision_type == 'wall' then return 'touch'
-	elseif object.collision_type == 'player' then return nil
+	elseif team.team == team_item.team then return nil
+	elseif object.collision_type == 'player' then return 'touch'
 	elseif object.collision_type == 'bullet' then return nil
+	elseif object.collision_type == 'turret' and team.team ~= team_item.team then return 'touch'  
 	else return nil
 	end
 end
@@ -14,7 +19,7 @@ local MoveSystem = class("MoveSystem", System)
 
 
 function MoveSystem:requires()
-    return {"base", "velocity", "bullets", "collision"}
+    return {"base", "velocity", "bullets", "collision", "bulletfilter"}
 end
 
 
@@ -34,7 +39,7 @@ function MoveSystem:update(dt)
         position.y = actualY
 	for i=1, len do
 		local other = cols[i].other:get('collision')
-		if other.collision_type == 'wall' then
+		if other.collision_type == 'wall' or other.collision_type == 'turret' or other.collision_type == 'player' then
 			local eng = cols[i].item:getEngine()
 			world.world:remove(cols[i].item)
 			eng:removeEntity(cols[i].item)

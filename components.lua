@@ -11,6 +11,12 @@ local collision = require('components.collision')
 local tilemap = require('components.tilemap')
 local hand = require('components.hand')
 local mouse = require('components.mouse')
+local turret = require('components.turret')
+local team = require('components.team')
+local area = require('components.area')
+local hp = require('components.hp')
+local bulletfilter = require('components.bulletfilter')
+local object = require('components.object')
 
 local components = { 
     base = base, 
@@ -24,7 +30,13 @@ local components = {
     collision = collision,
     tilemap = tilemap,
     hand = hand,
-    mouse = mouse
+    mouse = mouse,
+    turret = turret,
+    team = team,
+    area = area,
+    hp = hp,
+    bulletfilter = bulletfilter,
+    object = object
 }
 
 

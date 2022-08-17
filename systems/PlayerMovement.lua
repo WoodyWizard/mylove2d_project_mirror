@@ -3,6 +3,7 @@ local HooECS = require('HooECS')
 local playerFilter = function(item,other)
 	local object = other:get('collision')
 	if object.collision_type == 'wall' then return 'slide'
+	elseif object.collision_type == 'turret' then return 'slide'
 	elseif object.collision_type == 'bullet' then return nil
 	else return nil
 	end

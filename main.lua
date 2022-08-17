@@ -28,8 +28,8 @@ function love.load()
     cam:zoom(1)
     box_image = love.graphics.newImage("box.png")
     hand_image = love.graphics.newImage("hand.png")
-
-
+    turret_image = love.graphics.newImage("turret.png")
+    bullet_image = love.graphics.newImage("bullet.png")
     
     core:init()
     core:load_systems()
@@ -57,11 +57,20 @@ function love.load()
                             core:add_component("animation")(player_spritesheet, player_grid , player_animation) ,
                             core:add_component("camera")(cam),
                             core:add_component("collision")(nil, 'player'),
-			    core:add_component("hand")(0,0,hand_image)
+			    core:add_component("hand")(0,0,hand_image),
+			    core:add_component("team")('general'),
+			    core:add_component("object")()
                         })
 
-
-    core:create_base_entity()
+    core:create_entity({
+			    core:add_component("base")(500,500, 64,64),
+			    core:add_component("area")(),
+			    core:add_component("turret")(500),
+			    core:add_component("collision")(nil, 'turret'),
+			    core:add_component("team")('turret_team'),
+			    core:add_component("draw")(0.4,0,turret_image),
+			    core:add_component("object")()
+    })
 end
 
 
