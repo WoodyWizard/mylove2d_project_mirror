@@ -39,8 +39,34 @@ function MoveSystem:update(dt)
         position.y = actualY
 	for i=1, len do
 		local other = cols[i].other:get('collision')
+		local other_base = cols[i].item:get('base')
+		print(other_base.x , " <- x | y -> ", other_base.y)
 		if other.collision_type == 'wall' or other.collision_type == 'turret' or other.collision_type == 'player' then
 			local eng = cols[i].item:getEngine()
+			
+			local obj_partc = HooECS.Entity()
+			local base = Component.create("base", {"x","y","width","height"}, {x=other_base.x, y=other_base.y, 64,64})
+
+			local local_particle = love.graphics.newParticleSystem(PARTICLE, 128)
+			--local_particle:setDirection(2)
+			local_particle:setParticleLifetime(0.5, 1) -- Particles live at least 2s and at most 5s.
+			local_particle:setEmitterLifetime(0.1)
+			local_particle:setEmissionRate(100)
+			local_particle:setSizes(0.06)
+			--local_particle:setSizeVariation(0.5)
+			--local_particle:setSpread(100)
+			
+			local_particle:setSpeed(40, 80)
+			local_particle:setSpread(math.pi * 2)
+			local_particle:setColors(1, 1, 1, 1, 1, 1, 1, 0) -- Fade to transparency.
+
+
+			local particles = Component.create("particles", {"engine", "last_get_time"}, {engine = local_particle, last_get_time = love.timer.getTime()}) 
+
+			obj_partc:add(base())
+			obj_partc:add(particles())
+			eng:addEntity(obj_partc)
+
 			world.world:remove(cols[i].item)
 			eng:removeEntity(cols[i].item)
 		end

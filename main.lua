@@ -8,6 +8,13 @@ function love.draw()
         core.engine:draw()
 end
 
+local test_object = class("test_object")
+
+function test_object:test()
+	print("something TEST OBJECT")
+end
+
+
 
 function love.load()
     mmx = 0
@@ -30,7 +37,17 @@ function love.load()
     hand_image = love.graphics.newImage("hand.png")
     turret_image = love.graphics.newImage("turret.png")
     bullet_image = love.graphics.newImage("bullet.png")
-    
+    PARTICLE = love.graphics.newImage("particle1.png")
+
+	psystem = love.graphics.newParticleSystem(PARTICLE, 128)
+	psystem:setParticleLifetime(1, 2) -- Particles live at least 2s and at most 5s.
+	psystem:setEmitterLifetime(2)
+	psystem:setEmissionRate(1)
+	psystem:setSizes(0.1)
+	psystem:setSizeVariation(1)
+	psystem:setLinearAcceleration(-20, -20, 20, 20) -- Random movement in all directions.
+	psystem:setColors(1, 1, 1, 1, 1, 1, 1, 0) -- Fade to transparency.
+
     core:init()
     core:load_systems()
     core:init_collision()
@@ -71,6 +88,8 @@ function love.load()
 			    core:add_component("draw")(0.4,0,turret_image),
 			    core:add_component("object")()
     })
+
+    --core.eventmanager:addListener("test_object", test_object, test_object.test)
 end
 
 
@@ -84,7 +103,7 @@ function love.update(dt)
         timerupdate()
         my_time = 0
     end
-
+	psystem:update(dt)
     local arrowMouseX, arrowMouseY = cam:mousePosition()
     --[[
     local playerX, playerY = player.entity.position.x - 25 , player.entity.position.y - 25
@@ -108,6 +127,7 @@ end
 
 
 function love.mousepressed()
+	--core.eventmanager:fireEvent(test_object())
 end
 
 

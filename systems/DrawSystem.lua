@@ -5,7 +5,7 @@ local DrawSystem = class("DrawSystem", System)
 
 
 function DrawSystem:requires()
-    return { first = {"base", "draw"}, second = {"tilemap"}, c = {"camera"}, animated = {"base", "animation"}, weapon = {"hand"}}
+    return { first = {"base", "draw"}, second = {"tilemap"}, c = {"camera"}, animated = {"base", "animation"}, weapon = {"hand"}, particles = {'particles'}}
 end
 
 
@@ -33,6 +33,12 @@ function DrawSystem:draw()
 	    for _, Hand in pairs(self.targets.weapon) do
 		local h = Hand:get("hand")
 		love.graphics.draw(h.sprite, h.x, h.y, 0, 0.3)
+	    end
+	    for _, part in pairs(self.targets.particles) do
+        	local base = part:get('base')
+        	local pa = part:get('particles')
+        	love.graphics.draw(pa.engine, base.x, base.y)
+
 	    end
         camera.camera:detach()
     end

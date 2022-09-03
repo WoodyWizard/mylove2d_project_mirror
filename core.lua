@@ -92,6 +92,7 @@ function core:load_systems(dt)
     self.engine:addSystem(preface.systems.MouseMovement())
     self.engine:addSystem(preface.systems.TurretControl())
     self.engine:addSystem(preface.systems.HpSystem())
+    self.engine:addSystem(preface.systems.UpdateParticles())
 end
 
 
