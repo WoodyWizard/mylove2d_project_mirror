@@ -6,6 +6,7 @@ local my_time = 0
 
 function love.draw()
         core.engine:draw()
+	love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 10)
 end
 
 local test_object = class("test_object")
@@ -82,12 +83,47 @@ function love.load()
     core:create_entity({
 			    core:add_component("base")(500,500, 64,64),
 			    core:add_component("area")(),
-			    core:add_component("turret")(500),
+			    core:add_component("turret")(500, 360, 1, 0.2, 1, 1, 'simple'),
 			    core:add_component("collision")(nil, 'turret'),
 			    core:add_component("team")('turret_team'),
 			    core:add_component("draw")(0.4,0,turret_image),
 			    core:add_component("object")()
     })
+
+    core:create_entity({
+			    core:add_component("base")(1000,500, 64,64),
+			    core:add_component("area")(),
+			    core:add_component("turret")(500, 360, 1, 0.2, 1, 1, 'simple'),
+			    core:add_component("collision")(nil, 'turret'),
+			    core:add_component("team")('turret_team'),
+			    core:add_component("draw")(0.4,0,turret_image),
+			    core:add_component("object")()
+    })
+
+
+    core:create_entity({
+			    core:add_component("base")(500,700, 64,64),
+			    core:add_component("area")(),
+			    core:add_component("turret")(500, 360, 1, 0.2, 1, 1, 'simple'),
+			    core:add_component("collision")(nil, 'turret'),
+			    core:add_component("team")('turret_team'),
+			    core:add_component("draw")(0.4,0,turret_image),
+			    core:add_component("object")()
+    })
+
+    for i = 3000, 5000, 100 do
+	    core:create_entity({
+				    core:add_component("base")(i,500, 64,64),
+				    core:add_component("area")(),
+				    core:add_component("turret")(500, 360, 1, 0.2, 1, 1, 'shotgun'),
+				    core:add_component("collision")(nil, 'turret'),
+				    core:add_component("team")('turret_team'),
+				    core:add_component("draw")(0.4,0,turret_image),
+				    core:add_component("object")()
+	    })
+
+    end
+
 
     --core.eventmanager:addListener("test_object", test_object, test_object.test)
 end

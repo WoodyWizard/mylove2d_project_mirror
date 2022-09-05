@@ -26,7 +26,7 @@ function playermovement:update(dt)
                 local animation = entity:get("animation")
                 local collisionworld = entity:getParent()
                 local world = collisionworld:get("collisionworld")
-                
+
 		animation.animation.current = animation.animation.default
                 local dx , dy = 0, 0
                 if love.keyboard.isDown("w") then

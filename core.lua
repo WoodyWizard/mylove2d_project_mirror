@@ -93,6 +93,7 @@ function core:load_systems(dt)
     self.engine:addSystem(preface.systems.TurretControl())
     self.engine:addSystem(preface.systems.HpSystem())
     self.engine:addSystem(preface.systems.UpdateParticles())
+    self.engine:addSystem(preface.systems.PlayerInventory())
 end
 
 

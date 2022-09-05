@@ -40,7 +40,7 @@ function MoveSystem:update(dt)
 	for i=1, len do
 		local other = cols[i].other:get('collision')
 		local other_base = cols[i].item:get('base')
-		print(other_base.x , " <- x | y -> ", other_base.y)
+		--print(other_base.x , " <- x | y -> ", other_base.y)
 		if other.collision_type == 'wall' or other.collision_type == 'turret' or other.collision_type == 'player' then
 			local eng = cols[i].item:getEngine()
 			
