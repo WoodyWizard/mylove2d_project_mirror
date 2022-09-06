@@ -17,6 +17,8 @@ local area = require('components.area')
 local hp = require('components.hp')
 local bulletfilter = require('components.bulletfilter')
 local object = require('components.object')
+local weapon = require('components.weapon')
+local tower = require('components.tower')
 
 local components = { 
     base = base, 
@@ -36,7 +38,9 @@ local components = {
     area = area,
     hp = hp,
     bulletfilter = bulletfilter,
-    object = object
+    object = object,
+    weapon = weapon,
+    tower = tower
 }
 
 

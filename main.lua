@@ -21,8 +21,10 @@ function love.load()
     mmx = 0
     mmy = 0
     font = love.graphics.newFont("AlexandriaFLF.ttf", 64)
-    love.window.setMode(1920,1080)
+    love.window.setMode(1920,1080, {vsync = false})
     --love.window.setVSync(true)
+    screen_size_w = love.graphics:getWidth()
+    screen_size_h = love.graphics:getHeight()
     love.keyboard.setKeyRepeat(true)
     --love.window.setFullscreen( true )
     
@@ -77,7 +79,8 @@ function love.load()
                             core:add_component("collision")(nil, 'player'),
 			    core:add_component("hand")(0,0,hand_image),
 			    core:add_component("team")('general'),
-			    core:add_component("object")()
+			    core:add_component("object")(),
+			    core:add_component("weapon")(0,0.3)
                         })
 
     core:create_entity({
@@ -87,6 +90,8 @@ function love.load()
 			    core:add_component("collision")(nil, 'turret'),
 			    core:add_component("team")('turret_team'),
 			    core:add_component("draw")(0.4,0,turret_image),
+
+			    core:add_component("velocity")(2000,2000),
 			    core:add_component("object")()
     })
 
@@ -97,6 +102,8 @@ function love.load()
 			    core:add_component("collision")(nil, 'turret'),
 			    core:add_component("team")('turret_team'),
 			    core:add_component("draw")(0.4,0,turret_image),
+
+			    core:add_component("velocity")(2000,2000),
 			    core:add_component("object")()
     })
 
@@ -108,6 +115,7 @@ function love.load()
 			    core:add_component("collision")(nil, 'turret'),
 			    core:add_component("team")('turret_team'),
 			    core:add_component("draw")(0.4,0,turret_image),
+			    core:add_component("velocity")(2000,2000),
 			    core:add_component("object")()
     })
 
@@ -115,10 +123,11 @@ function love.load()
 	    core:create_entity({
 				    core:add_component("base")(i,500, 64,64),
 				    core:add_component("area")(),
-				    core:add_component("turret")(500, 360, 1, 0.2, 1, 1, 'shotgun'),
+				    core:add_component("turret")(500, 360, 1, 0.5, 1, 1, 'shotgun'),
 				    core:add_component("collision")(nil, 'turret'),
 				    core:add_component("team")('turret_team'),
 				    core:add_component("draw")(0.4,0,turret_image),
+				    core:add_component("velocity")(750,750),
 				    core:add_component("object")()
 	    })
 

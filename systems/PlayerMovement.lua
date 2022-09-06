@@ -30,24 +30,24 @@ function playermovement:update(dt)
 		animation.animation.current = animation.animation.default
                 local dx , dy = 0, 0
                 if love.keyboard.isDown("w") then
-                        dy = dy + -(velocity.dy)
+                        dy = dy + -(velocity.dy)*dt
                         animation.animation.current = animation.animation.up
                 end
                 if love.keyboard.isDown("s") then
-                        dy = dy +  (velocity.dy)
+                        dy = dy +  (velocity.dy)*dt
                         animation.animation.current = animation.animation.down
                 end
                 if love.keyboard.isDown("a") then
-                        dx = dx + -(velocity.dx)
+                        dx = dx + -(velocity.dx)*dt
                         animation.animation.current = animation.animation.left
                 end
                 if love.keyboard.isDown("d") then
-                        dx = dx +  (velocity.dx)
+                        dx = dx +  (velocity.dx)*dt
                         animation.animation.current = animation.animation.right
                 end
 
 
-                local newpositionx, newpositiony = position.x + (dx * 0.016) , position.y + (dy * 0.016)
+                local newpositionx, newpositiony = position.x + dx , position.y + dy
 
                 --print(collisionworld:get("collisionworld"))
                 local actualx, actualy, cols, len = world.world:move(entity, newpositionx , newpositiony, playerFilter)

@@ -6,7 +6,7 @@ local turretcontrol = class("turretcontrol", System)
 
 
 function turretcontrol:requires()
-        return {t = {"turret"}, e = {"team", "object"}}
+        return {t = {"turret"}, e = {"team", "object"}, walls = {"collision"}}
 end
 
 
@@ -17,6 +17,7 @@ function turretcontrol:update(dt)
 		local turret = entity:get("turret")
 		local area = entity:get("area")
 		local turret_team = entity:get("team")
+		local turret_velocity = entity:get("velocity")
 		for _, enemy in pairs(self.targets.e) do
 			local enemy_base = enemy:get("base")
 			local team = enemy:get("team")
@@ -43,17 +44,17 @@ function turretcontrol:update(dt)
 					else
 						local eng = entity:getEngine()
 						local entity_bullet = HooECS.Entity(entity)
-						local base = Component.create("base", {"x", "y", "width", "height"}, {x= fire_X, y=fire_Y, width = 8, height=8})
+						local base_bullet = Component.create("base", {"x", "y", "width", "height"}, {x= fire_X, y=fire_Y, width = 8, height=8})
 						local bullets = Component.create("bullets", {"angle"}, {angle = angle})
-						local velocity = Component.create("velocity", {"dx", "dy"}, {dx = 0, dy = 0})
+						local velocity = Component.create("velocity", {"dx", "dy"}, {dx = 1000, dy = 1000})
 						local collisio = Component.create("collision", {"something", "collision_type"}, {something = nil, collision_type = 'bullet'})
 						local draw = Component.create("draw", {"scale", "rotate", "sprite"}, {scale = 0.2, rotate = 0, sprite = nil})
 						local bulletfilter = Component.create("bulletfilter",{"objects"}, {objects = nil})
 						local teamteam = Component.create("team", {"team"}, {team = turret_team.team})
 
-						entity_bullet:add(base())
+						entity_bullet:add(base_bullet())
 						entity_bullet:add(bullets())
-						entity_bullet:add(velocity(1000,1000))
+						entity_bullet:add(velocity(turret_velocity.dx, turret_velocity.dy))
 						entity_bullet:add(collisio())
 						entity_bullet:add(draw(0.1,0,bullet_image))
 						entity_bullet:add(bulletfilter())
@@ -68,12 +69,12 @@ function turretcontrol:update(dt)
 					local reload_timer = love.timer.getTime()
 					if reload_timer < turret.timer + turret.reload then
 					else
-						for i = -0.2, 0.2, 0.2 do
+						for i = -0.4, 0.4, 0.4 do
 							local eng = entity:getEngine()
 							local entity_bullet = HooECS.Entity(entity)
 							local base = Component.create("base", {"x", "y", "width", "height"}, {x= fire_X, y=fire_Y, width = 8, height=8})
 							local bullets = Component.create("bullets", {"angle"}, {angle = angle + i})
-							local velocity = Component.create("velocity", {"dx", "dy"}, {dx = 0, dy = 0})
+							local velocity = Component.create("velocity", {"dx", "dy"}, {dx = 1000, dy = 1000})
 							local collisio = Component.create("collision", {"something", "collision_type"}, {something = nil, collision_type = 'bullet'})
 							local draw = Component.create("draw", {"scale", "rotate", "sprite"}, {scale = 0.2, rotate = 0, sprite = nil})
 							local bulletfilter = Component.create("bulletfilter",{"objects"}, {objects = nil})
@@ -81,7 +82,7 @@ function turretcontrol:update(dt)
 
 							entity_bullet:add(base())
 							entity_bullet:add(bullets())
-							entity_bullet:add(velocity(1000,1000))
+							entity_bullet:add(velocity(turret_velocity.dx, turret_velocity.dy))
 							entity_bullet:add(collisio())
 							entity_bullet:add(draw(0.1,0,bullet_image))
 							entity_bullet:add(bulletfilter())
