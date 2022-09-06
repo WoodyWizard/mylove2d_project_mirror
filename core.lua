@@ -13,10 +13,10 @@ local core = {collision_id_list = {
 }
 
 
-function core:init()
+function core:init(engine, eventmanager)
     HooECS.initialize({globals = true, debug = true})
-    self.engine = HooECS.Engine()
-    self.eventmanager = HooECS.EventManager()
+    self.engine = engine
+    self.eventmanager = eventmanager
 end
 
 
@@ -91,7 +91,7 @@ function core:load_systems(dt)
     self.engine:addSystem(preface.systems.HandMovement())
     self.engine:addSystem(preface.systems.MouseMovement())
     self.engine:addSystem(preface.systems.TurretControl())
-    self.engine:addSystem(preface.systems.HpSystem())
+    self.engine:addSystem(preface.systems.HpSystem(), "update")
     self.engine:addSystem(preface.systems.UpdateParticles())
     self.engine:addSystem(preface.systems.PlayerInventory())
 end

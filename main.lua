@@ -1,4 +1,5 @@
 core = require('core')
+local HooECS = require('HooECS')
 local anim8 = require('anim8')
 local bump = require 'bump.bump'
 
@@ -18,6 +19,8 @@ end
 
 
 function love.load()
+    global_engine = HooECS.Engine()
+    global_eventmanager = HooECS.EventManager()
     mmx = 0
     mmy = 0
     font = love.graphics.newFont("AlexandriaFLF.ttf", 64)
@@ -51,7 +54,7 @@ function love.load()
 	psystem:setLinearAcceleration(-20, -20, 20, 20) -- Random movement in all directions.
 	psystem:setColors(1, 1, 1, 1, 1, 1, 1, 0) -- Fade to transparency.
 
-    core:init()
+    core:init(global_engine, global_eventmanager)
     core:load_systems()
     core:init_collision()
     
@@ -71,7 +74,7 @@ function love.load()
     player_animation.current = player_animation.default
 
     core:create_entity( { 
-                            core:add_component("base")(100,100), 
+                            core:add_component("base")(100,100, 63, 63), 
                             core:add_component("velocity")(500,500), 
                             core:add_component("player")(1),
                             core:add_component("animation")(player_spritesheet, player_grid , player_animation) ,
@@ -131,6 +134,18 @@ function love.load()
 				    core:add_component("object")()
 	    })
 
+    end
+    for i = 1000, 6000, 100 do
+	core:create_entity({
+				    core:add_component("base")(i,4000, 64,64),
+				    core:add_component("area")(),
+				    core:add_component("turret")(4000, 360, 1, 0.5, 1, 1, 'shotgun'),
+				    core:add_component("collision")(nil, 'turret'),
+				    core:add_component("team")('turret_team'),
+				    core:add_component("draw")(0.4,0,turret_image),
+				    core:add_component("velocity")(750,750),
+				    core:add_component("object")()
+	    })
     end
 
 
