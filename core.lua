@@ -66,7 +66,7 @@ function core:init_tilemap()
                 for collision_id_counter = 1, #core.collision_id_list, 1 do
                     if newsomething.sti.layers["wallsandcollide"].data[b][i].gid == core.collision_id_list[collision_id_counter] then
                         core:create_entity({
-                            core:add_component("base")((i*64)-64,(b*64)-64),
+                            core:add_component("base")((i*64)-64,(b*64)-64, 64, 64, i, b),
                             core:add_component("collision")(nil, 'wall')
                         })
                     end

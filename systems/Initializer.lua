@@ -15,6 +15,8 @@ function initializer:onAddEntity(entity)
 		for _, obj in pairs(self.targets.world) do
 			local world = obj:get("collisionworld")
 			local basebase = entity:get("base")
+			basebase.tile_x = math.ceil(basebase.x/64)
+			basebase.tile_y = math.ceil(basebase.y/64)
 			world.world:add(entity, basebase.x, basebase.y, basebase.width, basebase.height)
 			entity:setParent(obj)
 		end

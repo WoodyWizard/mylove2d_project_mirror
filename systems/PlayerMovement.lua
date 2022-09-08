@@ -1,5 +1,15 @@
 local HooECS = require('HooECS')
 
+
+local TriggerPhantomEvent = class("TriggerPhantom")
+
+function TriggerPhantomEvent:initialize(moved_object)
+	self.object = moved_object
+end
+
+
+
+
 local playerFilter = function(item,other)
 	local object = other:get('collision')
 	if object.collision_type == 'wall' then return 'slide'
@@ -45,17 +55,20 @@ function playermovement:update(dt)
                         dx = dx +  (velocity.dx)*dt
                         animation.animation.current = animation.animation.right
                 end
-
+		if position.tile_x ~= math.ceil((position.x+32)/64) then
+			position.tile_x = math.ceil((position.x+32)/64)
+			entity.eventManager:fireEvent(TriggerPhantomEvent(entity))
+		end
+		if position.tile_y ~= math.ceil((position.y+32)/64) then
+			position.tile_y = math.ceil((position.y+32)/64)
+			entity.eventManager:fireEvent(TriggerPhantomEvent(entity))
+		end
 
                 local newpositionx, newpositiony = position.x + dx , position.y + dy
 
-                --print(collisionworld:get("collisionworld"))
                 local actualx, actualy, cols, len = world.world:move(entity, newpositionx , newpositiony, playerFilter)
-                --print(actualx, " ", actualy)
                 position.x = actualx
                 position.y = actualy
-                --position.x = position.x + (dx * dt)
-                --position.y = position.y + (dy * dt)
         end
 end
 

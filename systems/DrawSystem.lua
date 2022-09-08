@@ -12,6 +12,7 @@ end
 
 function DrawSystem:draw()
     for _, cam in pairs(self.targets.c) do
+	--local spritebatch = love.graphics.newSpriteBatch()
         local camera = cam:get("camera")
 	local base_player = cam:get("base")
         camera.camera:attach()
@@ -27,6 +28,7 @@ function DrawSystem:draw()
 		if drawObjectPosition.x < base_player.x + screen_size_w/2 and drawObjectPosition.x > base_player.x - screen_size_w/2 and 
 		   drawObjectPosition.y < base_player.y + screen_size_h/2 and drawObjectPosition.y > base_player.y - screen_size_h/2 then
 			love.graphics.draw(spriteObject.sprite, drawObjectPosition.x, drawObjectPosition.y, spriteObject.rotate ,spriteObject.scale)
+
 		end
             end
             for _, animationEntity in pairs(self.targets.animated) do
