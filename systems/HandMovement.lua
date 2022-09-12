@@ -49,6 +49,8 @@ function handmovement:update(dt)
 				entity_bullet:add(teamteam())
 				--entity_bullet:setParent(entity)
 				eng:addEntity(entity_bullet)
+				love.audio.stop(shoot)
+				love.audio.play(shoot)
 
 				weapon.timer = love.timer.getTime()
 			end

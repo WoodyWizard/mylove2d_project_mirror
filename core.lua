@@ -94,6 +94,7 @@ function core:load_systems(dt)
     self.engine:addSystem(preface.systems.HpSystem(), "update")
     self.engine:addSystem(preface.systems.UpdateParticles())
     self.engine:addSystem(preface.systems.PlayerInventory())
+    self.engine:addSystem(preface.systems.TowerSystem())
 end
 
 

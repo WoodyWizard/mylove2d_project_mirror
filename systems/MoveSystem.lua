@@ -8,6 +8,18 @@ function PhantomEvent:initialize(turret_object)
 end
 
 
+local threadCode = [[
+local bump = require('bump.bump')
+
+local world = bump.newWorld()
+
+local object, rects = ...
+
+world.rects = rects
+
+
+]]
+
 
 local bulletFilter = function(item,other)
 	local object = other:get('collision')
@@ -80,7 +92,7 @@ function MoveSystem:update(dt)
 		end
 	end
     end
-    for index, entity in pairs(self.targets.phantom) do 
+    for _, entity in pairs(self.targets.phantom) do 
 	local collisionworld = entity:getParent()
 	local world = collisionworld:get("collisionworld")
 	local position = entity:get("base")

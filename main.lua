@@ -7,7 +7,7 @@ local my_time = 0
 
 function love.draw()
         core.engine:draw()
-	love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 10)
+	love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 40)
 	stats = love.graphics.getStats()
 	--print(stats.drawcalls)
 end
@@ -21,12 +21,15 @@ end
 
 
 function love.load()
+    trumpet = love.audio.newSource('trumpet.mp3', 'static')
+    shoot = love.audio.newSource("shoot.mp3", "stream")
+    love.audio.setVolume(0.05)
     global_engine = HooECS.Engine()
     global_eventmanager = HooECS.EventManager()
     mmx = 0
     mmy = 0
     font = love.graphics.newFont("AlexandriaFLF.ttf", 64)
-    love.window.setMode(1920,1080, {vsync = false})
+    love.window.setMode(1920,1080, {vsync = true})
     --love.window.setVSync(true)
     screen_size_w = love.graphics:getWidth()
     screen_size_h = love.graphics:getHeight()
@@ -45,6 +48,7 @@ function love.load()
     hand_image = love.graphics.newImage("hand.png")
     turret_image = love.graphics.newImage("turret.png")
     bullet_image = love.graphics.newImage("bullet.png")
+    tower_image = love.graphics.newImage("tower.png")
     PARTICLE = love.graphics.newImage("particle1.png")
 
 	psystem = love.graphics.newParticleSystem(PARTICLE, 128)
@@ -85,7 +89,8 @@ function love.load()
 			    core:add_component("hand")(0,0,hand_image),
 			    core:add_component("team")('general'),
 			    core:add_component("object")(),
-			    core:add_component("weapon")(0,0.3)
+			    core:add_component("weapon")(0,0.3),
+			    core:add_component("resources")(),
                         })
 
     core:create_entity({
@@ -94,8 +99,7 @@ function love.load()
 			    core:add_component("turret")(500, 360, 1, 0.2, 1, 1, 'simple'),
 			    core:add_component("collision")(nil, 'turret'),
 			    core:add_component("team")('turret_team'),
-			    core:add_component("draw")(0.4,0,turret_image),
-
+			    core:add_component("draw")(turret_image, 0.4, 0),
 			    core:add_component("velocity")(2000,2000),
 			    core:add_component("object")()
     })
@@ -106,8 +110,7 @@ function love.load()
 			    core:add_component("turret")(500, 360, 1, 0.2, 1, 1, 'simple'),
 			    core:add_component("collision")(nil, 'turret'),
 			    core:add_component("team")('turret_team'),
-			    core:add_component("draw")(0.4,0,turret_image),
-
+			    core:add_component("draw")(turret_image, 0.4, 0),
 			    core:add_component("velocity")(2000,2000),
 			    core:add_component("object")()
     })
@@ -119,7 +122,7 @@ function love.load()
 			    core:add_component("turret")(500, 360, 1, 0.2, 1, 1, 'simple'),
 			    core:add_component("collision")(nil, 'turret'),
 			    core:add_component("team")('turret_team'),
-			    core:add_component("draw")(0.4,0,turret_image),
+			    core:add_component("draw")(turret_image, 0.4, 0),
 			    core:add_component("velocity")(2000,2000),
 			    core:add_component("object")()
     })
@@ -131,7 +134,7 @@ function love.load()
 				    core:add_component("turret")(500, 360, 1, 0.5, 1, 1, 'shotgun'),
 				    core:add_component("collision")(nil, 'turret'),
 				    core:add_component("team")('turret_team'),
-				    core:add_component("draw")(0.4,0,turret_image),
+				    core:add_component("draw")(turret_image, 0.4, 0),
 				    core:add_component("velocity")(750,750),
 				    core:add_component("object")()
 	    })
@@ -144,11 +147,18 @@ function love.load()
 				    core:add_component("turret")(600, 360, 1, 0.5, 1, 1, 'shotgun'),
 				    core:add_component("collision")(nil, 'turret'),
 				    core:add_component("team")('turret_team'),
-				    core:add_component("draw")(0.4,0,turret_image),
+				    core:add_component("draw")(turret_image, 0.4, 0),
 				    core:add_component("velocity")(750,750),
 				    core:add_component("object")()
 	    })
     end
+
+    core:create_entity({
+			core:add_component("base")(1750,750,64,64),
+			core:add_component("tower")(10, 0, 1),
+			core:add_component("draw")(tower_image, 0.8, 0, 0.8, 54, 400),
+			core:add_component("collision")(nil, 'wall')
+    })
 
 
     --core.eventmanager:addListener("test_object", test_object, test_object.test)
@@ -183,8 +193,11 @@ function love.update(dt)
 end
 
 
-function love.keypressed(key, isrepeat)
+function love.keypressed(key, scancode, isrepeat)
+	--print(key, " ", scancode)
+	if scancode == 'b' then
 
+	end
 end
 
 
